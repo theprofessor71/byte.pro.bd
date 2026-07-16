@@ -1,0 +1,53 @@
+/* ============================================================
+   CyberBlogs — Prism code theme (cyber dark)
+   Works with Prism core; safe without it too (plain <pre><code>).
+   ============================================================ */
+
+pre[class*="language-"], pre {
+    position: relative;
+    background: #0b1020;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin: 20px 0;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 13.8px;
+    line-height: 1.6;
+    color: #dbe4f3;
+    tab-size: 4;
+}
+html[data-theme="light"] pre[class*="language-"], html[data-theme="light"] pre {
+    background: #0f172a; /* keep code dark in light mode — reads better */
+}
+code[class*="language-"] { font-family: inherit; }
+
+.token.comment, .token.prolog, .token.cdata { color: #5b6b85; font-style: italic; }
+.token.punctuation { color: #8ea0bd; }
+.token.property, .token.tag, .token.constant, .token.symbol, .token.deleted { color: #ff7a93; }
+.token.boolean, .token.number { color: #ffb86c; }
+.token.selector, .token.attr-name, .token.string, .token.char, .token.builtin, .token.inserted { color: #00ff88; }
+.token.operator, .token.entity, .token.url { color: #7fd6e8; }
+.token.atrule, .token.attr-value, .token.keyword { color: #00f0ff; }
+.token.function, .token.class-name { color: #c792ea; }
+.token.regex, .token.important, .token.variable { color: #ffd76d; }
+.token.important, .token.bold { font-weight: 700; }
+.token.italic { font-style: italic; }
+
+/* Line numbers (Prism line-numbers plugin markup) */
+pre.line-numbers { padding-left: 3.4em; counter-reset: linenumber; }
+pre.line-numbers > code { position: relative; white-space: inherit; }
+.line-numbers .line-numbers-rows {
+    position: absolute; top: 0; left: -3.4em; width: 3em;
+    pointer-events: none; user-select: none;
+    border-right: 1px solid rgba(148, 163, 184, 0.15);
+}
+.line-numbers-rows > span { display: block; counter-increment: linenumber; }
+.line-numbers-rows > span::before {
+    content: counter(linenumber);
+    display: block; padding-right: .8em; text-align: right; color: #45536b;
+}
+
+/* Scrollbar */
+pre::-webkit-scrollbar { height: 8px; }
+pre::-webkit-scrollbar-thumb { background: rgba(0, 240, 255, 0.25); border-radius: 99px; }

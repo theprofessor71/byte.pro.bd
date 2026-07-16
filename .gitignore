@@ -1,0 +1,12 @@
+# Runtime files — created on the server, never committed
+config/config.php
+config/install.lock
+protected_uploads/*
+!protected_uploads/.htaccess
+
+# Vendor libs — downloaded per assets/vendor/README.md
+assets/vendor/*.js
+
+# OS noise
+Thumbs.db
+.DS_Store

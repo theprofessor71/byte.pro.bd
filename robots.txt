@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /config/
+Disallow: /includes/
+Disallow: /protected_uploads/
+Disallow: /install.php
+Disallow: /search.php
+Disallow: /download.php
+
+Sitemap: https://byte.pro.bd/sitemap.php

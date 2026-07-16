@@ -1,0 +1,64 @@
+# Root .htaccess — CyberBlogs (LiteSpeed/Apache compatible)
+
+Options -Indexes
+ServerSignature Off
+
+# --- Block sensitive files ---
+<FilesMatch "\.(sql|lock|sample\.php|md|log|ini|sh|bak|old)$">
+    Require all denied
+</FilesMatch>
+<FilesMatch "^(config\.php|\.htaccess|\.git.*)$">
+    Require all denied
+</FilesMatch>
+# FilesMatch only sees basenames — block /.git/ paths (e.g. /.git/config) too
+RedirectMatch 404 /\.git
+
+# --- Security headers (only for responses PHP doesn't already cover) ---
+<IfModule mod_headers.c>
+    Header always setifempty X-Frame-Options "DENY"
+    Header always setifempty X-Content-Type-Options "nosniff"
+    Header always setifempty Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Custom 404 (core directive — keep outside IfModule)
+ErrorDocument 404 /404.php
+
+# --- Pretty URLs ---
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Force HTTPS (Cloudflare edge → origin)
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # /post/my-slug → post.php?slug=my-slug
+    RewriteRule ^post/([a-z0-9-]+)/?$ post.php?slug=$1 [L,QSA]
+    # /category/name → category.php?cat=name
+    # (rewrites match the DECODED path, so "Web Security" contains a space —
+    #  use [^/]+ and B to re-encode the backreference; PHP validates length/content)
+    RewriteRule ^category/([^/]+?)/?$ category.php?cat=$1 [L,QSA,B]
+    # /tag/name → tag.php?tag=name
+    RewriteRule ^tag/([^/]+?)/?$ tag.php?tag=$1 [L,QSA,B]
+</IfModule>
+
+# --- Cache static assets (Cloudflare respects these) ---
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 7 days"
+    ExpiresByType application/javascript "access plus 7 days"
+    ExpiresByType image/png "access plus 30 days"
+    ExpiresByType image/jpeg "access plus 30 days"
+    ExpiresByType image/svg+xml "access plus 30 days"
+    ExpiresByType image/webp "access plus 30 days"
+    ExpiresByType font/woff2 "access plus 365 days"
+</IfModule>
+
+# --- Basic request filtering ---
+<IfModule mod_rewrite.c>
+    # Block obvious traversal / null-byte probes in query strings
+    RewriteCond %{QUERY_STRING} (\.\./|%2e%2e%2f|%00) [NC]
+    RewriteRule .* - [F]
+</IfModule>
+
+AddDefaultCharset UTF-8

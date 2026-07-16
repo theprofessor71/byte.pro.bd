@@ -1,0 +1,9 @@
+# admin/ — extra hardening
+Options -Indexes
+
+# No caching of admin pages anywhere (browser or CDN).
+# setifempty: PHP's session cache limiter already sends Cache-Control.
+<IfModule mod_headers.c>
+    Header always setifempty Cache-Control "no-store, no-cache, must-revalidate"
+    Header always set X-Robots-Tag "noindex, nofollow"
+</IfModule>

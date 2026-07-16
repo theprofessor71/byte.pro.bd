@@ -1,0 +1,81 @@
+/* ============================================================
+   CyberBlogs — Animations & Effects
+   ============================================================ */
+
+@keyframes blink { 50% { opacity: 0; } }
+@keyframes marquee { to { transform: translateX(-50%); } }
+@keyframes growBar { from { width: 0; } }
+@keyframes toastIn { from { opacity: 0; transform: translateY(12px); } }
+@keyframes pulseGlow {
+    0%, 100% { text-shadow: 0 0 8px rgba(0, 240, 255, .5); }
+    50% { text-shadow: 0 0 26px rgba(0, 240, 255, 1); }
+}
+
+/* ---------- Glitch text ---------- */
+.glitch { position: relative; display: inline-block; }
+.glitch::before, .glitch::after {
+    content: attr(data-text);
+    position: absolute; inset: 0; overflow: hidden;
+    background: inherit;
+    -webkit-background-clip: text; background-clip: text;
+    opacity: 0;
+}
+.glitch:hover::before, .page-404 .glitch::before {
+    opacity: .8; color: #ff2d55; -webkit-text-fill-color: #ff2d55;
+    animation: glitchShift 2.4s infinite linear alternate-reverse;
+    clip-path: polygon(0 0, 100% 0, 100% 38%, 0 38%);
+}
+.glitch:hover::after, .page-404 .glitch::after {
+    opacity: .8; color: var(--accent); -webkit-text-fill-color: var(--accent);
+    animation: glitchShift 1.8s infinite linear alternate;
+    clip-path: polygon(0 62%, 100% 62%, 100% 100%, 0 100%);
+}
+@keyframes glitchShift {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2.5px, 1.5px); }
+    40% { transform: translate(2px, -1px); }
+    60% { transform: translate(-1.5px, -2px); }
+    80% { transform: translate(2.5px, 1.5px); }
+    100% { transform: translate(0); }
+}
+
+/* ---------- Scroll-reveal (AOS-lite, driven by app.js IntersectionObserver) ---------- */
+[data-aos] {
+    opacity: 0; transform: translateY(22px);
+    transition: opacity .55s ease, transform .55s ease;
+}
+[data-aos].aos-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+    [data-aos] { opacity: 1; transform: none; transition: none; }
+    .marquee-track { animation: none; }
+    .glitch::before, .glitch::after { animation: none; opacity: 0; }
+    * { scroll-behavior: auto !important; }
+}
+
+/* ---------- Card shine sweep ---------- */
+.post-card { position: relative; }
+.post-card::after {
+    content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    background: linear-gradient(115deg, transparent 30%, rgba(0, 240, 255, 0.06) 48%, transparent 62%);
+    background-size: 240% 100%; background-position: 120% 0;
+    transition: background-position .7s ease;
+}
+.post-card:hover::after { background-position: -60% 0; }
+
+/* ---------- Reading progress on post pages ---------- */
+.page-post #progressBar { display: block; }
+
+/* ---------- Reaction pop ---------- */
+.reaction-btn.pop svg { animation: reactPop .35s cubic-bezier(.2, 2.2, .4, 1); }
+@keyframes reactPop { 40% { transform: scale(1.45) rotate(-8deg); } }
+
+/* ---------- Copy button feedback ---------- */
+.copy-btn {
+    position: absolute; top: 9px; right: 9px; z-index: 2;
+    padding: 4px 11px; font-size: 12px; font-family: var(--font-mono);
+    background: rgba(15, 21, 36, 0.85); color: var(--text-dim);
+    border: 1px solid var(--border); border-radius: 7px; cursor: pointer;
+    opacity: 0; transition: opacity .2s, color .2s;
+}
+pre:hover .copy-btn { opacity: 1; }
+.copy-btn.copied { color: var(--accent-2); border-color: var(--accent-2); }

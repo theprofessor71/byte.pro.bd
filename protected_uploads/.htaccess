@@ -1,0 +1,13 @@
+# protected_uploads/ — files ONLY reachable via download.php hash lookup
+Require all denied
+Options -Indexes
+
+# Belt-and-braces: even if the deny is bypassed, never execute anything here
+<FilesMatch "\.(php|phtml|php3|php4|php5|php7|phar|pl|py|cgi|sh)$">
+    Require all denied
+</FilesMatch>
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .phar
+# php_flag is mod_php-only — on CGI/FastCGI an unknown directive 500s the dir
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
